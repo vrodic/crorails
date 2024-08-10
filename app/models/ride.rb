@@ -6,13 +6,14 @@ class Ride < ApplicationRecord
 
   def sync
     train_id = trip.trip_short_name
+    get_delay(train_id)
   end
 
   def get_delay(train_id)
     train_file = "/tmp/hz#{train_id}"
 
     conn = Faraday.new(
-  url: "https://traindelay.hzpp.hr/train/delay?trainId=#{trainId}",
+  url: "https://traindelay.hzpp.hr/train/delay?trainId=#{train_id}",
   headers: { "Authorization" => "Bearer #{ENV["HZ_KEY"]}",
   "User-Agent": "okhttp/4.11.0" }
 )

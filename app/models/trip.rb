@@ -19,10 +19,12 @@ class Trip < ApplicationRecord
 
 
   def sync_last_ride
-    if !rides.last.finished?
-      rides.last.sync
+    last_ride = rides.last
+    if last_ride && !last_ride.finished?
+      last_ride.sync
       return
     end
+    debugger
 
     last_ride = rides.build
     last_ride.sync
