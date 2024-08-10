@@ -23,7 +23,7 @@ class Trip < ApplicationRecord
       rides.last.sync
       return
     end
-    
+
     last_ride = rides.build
     last_ride.sync
   end

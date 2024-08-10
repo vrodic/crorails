@@ -6,7 +6,6 @@ class Ride < ApplicationRecord
 
   def sync
     train_id = trip.trip_short_name
-
   end
 
   def get_delay(train_id)
@@ -18,6 +17,6 @@ class Ride < ApplicationRecord
   "User-Agent": "okhttp/4.11.0" }
 )
     response = conn.get
-    File.open(train_file, "w") { |file| file.write(response.body) }    
+    File.open(train_file, "w") { |file| file.write(response.body) }
   end
 end
