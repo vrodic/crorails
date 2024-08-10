@@ -16,4 +16,15 @@ class Trip < ApplicationRecord
     .where("departure_time < ?", time_str)
     .where("? BETWEEN start_date AND end_date AND #{weekday}=1", date)
   }
+
+
+  def sync_last_ride
+    if !rides.last.finished?
+      rides.last.sync
+      return
+    end
+    
+    last_ride = rides.build
+    last_ride.sync
+  end
 end
