@@ -26,7 +26,7 @@ class Trip < ApplicationRecord
       return last_ride
     end
 
-    if last_ride && last_ride.created_at.getlocal.strftime('%Y%m%d') == Time.now.getlocal.strftime('%Y%m%d')
+    if last_ride && last_ride.ride_delay_logs.order(:timestamp).last.timestamp.getlocal.strftime('%Y%m%d') == Time.now.getlocal.strftime('%Y%m%d')
       return last_ride if last_ride.finished?
     else
       last_ride = rides.build

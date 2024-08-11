@@ -39,6 +39,7 @@ class Ride < ApplicationRecord
     last_delay_log = ride_delay_logs.last
     delay_log = ride_delay_logs.build
     minutes_late = 0
+    timestamp = nil
 
     document = Nokogiri::HTML(html)
     document.css('td').each do |td|
@@ -52,17 +53,17 @@ class Ride < ApplicationRecord
       if test_ready
         self.status = :ready
         delay_log.status = :ready
-        delay_log.timestamp = test_ready.strip # TODO: process this
+        timestamp = test_ready.strip # TODO: process this
       end
       if test_finished
         self.status = :finished
         delay_log.status = :finished
-        delay_log.timestamp = test_finished.strip
+        timestamp = test_finished.strip
       end
       if test_moving
         self.status = :moving
         delay_log.status = :moving
-        delay_log.timestamp = test_moving.strip
+        timestamp = test_moving.strip
       end
       test_delay = return_value(text, 'Kasni')
       next unless test_delay
@@ -73,11 +74,13 @@ class Ride < ApplicationRecord
     end
 
     delay_log.minutes_late = minutes_late
+    timestamp = timestamp.gsub('u ', '').gsub(' sati', '')
+    delay_log.timestamp = Time.zone.strptime(timestamp, '%d.%m.%y. %H:%M') #  10.08.24. u 22:25 sati
     self.minutes_late = minutes_late
 
     if last_delay_log && (last_delay_log.point_name == delay_log.point_name &&
          last_delay_log.minutes_late == delay_log.minutes_late &&
-         last_delay_log.status == delay_log.status)
+         last_delay_log.status == delay_log.status && delay_log.timestamp == last_delay_log.timestamp)
       delay_log.destroy
     end
     save

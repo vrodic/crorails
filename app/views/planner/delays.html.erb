@@ -7,10 +7,10 @@ Late: <%= @last_ride.minutes_late %>
     <th>Status</th>
     <th>Checkpoint</th>
   </tr>
-  <% @trip.rides.order(:updated_at).each do |ride| %>
+  <% @trip.rides.order(updated_at: :desc).each do |ride| %>
   <tr>
     <td><%= ride.minutes_late %></td>
-    <td><%= localize(ride.updated_at, :format => :short) %></td>
+    <td><%= localize(ride.ride_delay_logs.last.timestamp, :format => :short) %></td>
     <td><%= ride.status %></td>
     <td><%= ride.ride_delay_logs.last.point_name %></td>
   </tr>
