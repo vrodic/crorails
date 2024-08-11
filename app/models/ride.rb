@@ -18,7 +18,7 @@ class Ride < ApplicationRecord
 
     # return File.read(train_file) if File.exist?(train_file)
     #
-    puts "Fetching #{train_id}: #{status}"
+    Rails.logger.debug "Fetching #{train_id}: #{status}"
 
     conn = Faraday.new(
       url: "https://traindelay.hzpp.hr/train/delay?trainId=#{train_id}",
@@ -48,6 +48,7 @@ class Ride < ApplicationRecord
       test_finished = return_value(text, 'Završio vožnju')
       test_ready = return_value(text, 'Formiran')
       test_moving = return_value(text, 'Odlazak')
+      test_moving ||= return_value(text, 'Dolazak')
       if test_ready
         self.status = :ready
         delay_log.status = :ready
