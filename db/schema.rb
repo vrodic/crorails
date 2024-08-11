@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_10_130929) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_11_075209) do
   create_table "agency", id: false, force: :cascade do |t|
     t.text "agency_id"
     t.text "agency_name"
@@ -49,6 +49,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_10_130929) do
     t.text "point_name"
     t.text "created_at"
     t.integer "minutes_late"
+    t.integer "status", default: 0
+    t.text "timestamp"
   end
 
   create_table "rides", force: :cascade do |t|

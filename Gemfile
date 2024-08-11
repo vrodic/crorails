@@ -15,6 +15,12 @@ gem "dotenv", groups: [ :development, :test ]
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
+gem "nokogiri"
+
+group :development, :test do
+  gem "ruby-lsp", require: false
+end
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -24,4 +30,7 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+  gem "rubocop", require: false
+  gem "rubocop-performance", require: false
+  gem "rubocop-rails", require: false
 end
