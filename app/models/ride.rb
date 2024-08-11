@@ -6,14 +6,14 @@ class Ride < ApplicationRecord
 
   enum :status, %i[initialized ready moving finished]
 
-  def sync
+  def sync(wait: true)
     train_id = trip.trip_short_name
-    process_delay(get_delay(train_id))
+    process_delay(get_delay(train_id, wait:))
   end
 
   private
 
-  def get_delay(train_id)
+  def get_delay(train_id, wait: true)
     # train_file = "/tmp/hz-#{train_id}-#{Time.zone.now.strftime('%Y%m%d')}.html"
 
     # return File.read(train_file) if File.exist?(train_file)
@@ -28,7 +28,7 @@ class Ride < ApplicationRecord
       }
     )
     response = conn.get
-    sleep rand
+    sleep rand if wait
 
     # File.open(train_file, 'w') { |file| file.write(response.body) }
 

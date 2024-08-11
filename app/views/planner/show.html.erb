@@ -1,0 +1,16 @@
+From: <h2><%= @source.stop_name %></h2><br>
+To: <h2><%= @destination.stop_name %></h2><br>
+<table class="container">
+<tr>
+    <th>Departure</th>
+    <th>At destination</th>
+    <th>Train</th>
+  </tr>
+  <% @trips.each do |trip| %>
+  <tr>
+    <td><%= trip["departure_time"] %></td>
+    <td><%= trip["destination_time"] %></td>
+    <td><%= link_to trip["trip_short_name"], planner_delays_path(trip_id: trip["trip_id"]) %></td>
+  </tr>
+  <% end %>
+</table>

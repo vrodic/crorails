@@ -1,0 +1,20 @@
+Train: <%= @trip.trip_short_name %><br>
+Late: <%= @last_ride.minutes_late %>
+<table class="container">
+<tr>
+    <th>Created</th>
+    <th>Updated</th>
+    <th>Status</th>
+    <th>Checkpoint</th>
+    <th>Late</th>
+  </tr>
+  <% @trip.rides.order(:updated_at).each do |ride| %>
+  <tr>
+    <td><%= localize(ride.created_at, :format => :short) %></td>
+    <td><%= localize(ride.updated_at, :format => :short) %></td>
+    <td><%= ride.status %></td>
+    <td><%= ride.ride_delay_logs.last.point_name %></td>
+    <td><%= ride.minutes_late %></td>
+  </tr>
+  <% end %>
+</table>

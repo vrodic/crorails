@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_11_075209) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_11_163533) do
   create_table "agency", id: false, force: :cascade do |t|
     t.text "agency_id"
     t.text "agency_name"
@@ -47,7 +47,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_11_075209) do
   create_table "ride_delay_logs", id: false, force: :cascade do |t|
     t.integer "ride_id"
     t.text "point_name"
-    t.text "created_at"
+    t.datetime "created_at"
     t.integer "minutes_late"
     t.integer "status", default: 0
     t.text "timestamp"
@@ -56,8 +56,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_11_075209) do
   create_table "rides", force: :cascade do |t|
     t.text "trip_id"
     t.text "trip_short_name"
-    t.text "created_at"
-    t.text "updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.text "end_time"
     t.integer "status", default: 0
     t.integer "minutes_late"
@@ -108,5 +108,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_11_075209) do
     t.index ["route_id", "direction_id"], name: "route_dir_idx"
     t.index ["shape_id"], name: "t_shape_idx"
     t.index ["trip_id"], name: "trip_idx", unique: true
+  end
+
+  create_table "user_stop_histories", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "stop_id"
+    t.string "stop_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 end

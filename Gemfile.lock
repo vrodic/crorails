@@ -73,6 +73,13 @@ GEM
       tzinfo (~> 2.0, >= 2.0.5)
     ast (2.4.2)
     base64 (0.2.0)
+    better_html (2.1.1)
+      actionview (>= 6.0)
+      activesupport (>= 6.0)
+      ast (~> 2.0)
+      erubi (~> 1.4)
+      parser (>= 2.4)
+      smart_properties
     bigdecimal (3.1.8)
     brakeman (6.1.2)
       racc
@@ -86,6 +93,13 @@ GEM
       reline (>= 0.3.8)
     dotenv (3.1.2)
     drb (2.2.1)
+    erb_lint (0.6.0)
+      activesupport
+      better_html (>= 2.0.1)
+      parser (>= 2.7.1.4)
+      rainbow
+      rubocop (>= 1)
+      smart_properties
     erubi (1.13.0)
     faraday (2.10.1)
       faraday-net_http (>= 2.0, < 3.2)
@@ -236,6 +250,7 @@ GEM
       sorbet-runtime (>= 0.5.10782)
     ruby-progressbar (1.13.0)
     securerandom (0.3.1)
+    smart_properties (1.17.0)
     sorbet-runtime (0.5.11518)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
@@ -292,6 +307,7 @@ DEPENDENCIES
   brakeman
   debug
   dotenv
+  erb_lint
   faraday
   nokogiri
   puma (>= 5.0)

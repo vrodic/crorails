@@ -19,20 +19,20 @@ class Trip < ApplicationRecord
       .where("? BETWEEN start_date AND end_date AND #{weekday}=1", date)
   }
 
-  def sync_last_ride
+  def sync_last_ride(wait: true)
     last_ride = rides.last
     if last_ride && !last_ride.finished?
-      last_ride.sync
+      last_ride.sync(wait:)
       return last_ride
     end
 
-    if last_ride && Time.new(last_ride.created_at).getlocal.strftime('%Y%m%d') == Time.now.getlocal.strftime('%Y%m%d')
+    if last_ride && last_ride.created_at.getlocal.strftime('%Y%m%d') == Time.now.getlocal.strftime('%Y%m%d')
       return last_ride if last_ride.finished?
     else
       last_ride = rides.build
     end
 
-    last_ride.sync
+    last_ride.sync(wait:)
     last_ride
   end
 end

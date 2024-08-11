@@ -1,0 +1,8 @@
+<%= form_with url: planner_show_url, method: :get do |form| %>
+  <%= form.label :query, "Search for:" %>
+  <%= form.select :source, @sources.map { |stop| [stop.stop_name, stop.stop_id] } %>
+  <%= form.select :destination, @destinations.map { |stop| [stop.stop_name, stop.stop_id] } %>
+  <%= form.check_box :all_today %>
+  <%= form.label :all_today, "All trains today" %>
+  <%= form.submit "Search" %>
+<% end %>
