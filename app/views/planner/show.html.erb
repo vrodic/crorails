@@ -8,8 +8,8 @@ To: <strong><%= @destination.stop_name %></strong><br>
   </tr>
   <% @trips.each do |trip| %>
   <tr>
-    <td><%= trip["departure_time"] %></td>
-    <td><%= trip["destination_time"] %></td>
+    <td><%= trip["departure_time"][0..4] %></td>
+    <td><%= trip["destination_time"][0..4] %></td>
     <td><%= link_to trip["trip_short_name"], planner_delays_path(trip_id: trip["trip_id"]) %></td>
   </tr>
   <% end %>
