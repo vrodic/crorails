@@ -1,9 +1,9 @@
-From: <h4><%= @source.stop_name %></h4><br>
-To: <h4><%= @destination.stop_name %></h4><br>
+From: <strong><%= @source.stop_name %></strong><br>
+To: <strong><%= @destination.stop_name %></strong><br>
 <table class="container">
 <tr>
     <th>Departure</th>
-    <th>At destination</th>
+    <th>Arrival</th>
     <th>Train</th>
   </tr>
   <% @trips.each do |trip| %>

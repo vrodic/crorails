@@ -51,10 +51,17 @@
    text-align: left;
    color: #185875;
  }
+ .container th  {
+    font-weight: bold;
+    font-size: 0.7em;
+text-align: left;
+color: #185875;
+}
+
 
  .container td {
        font-weight: normal;
-       font-size: 1em;
+       font-size: 0.7em;
    -webkit-box-shadow: 0 2px 2px -2px #0E1119;
         -moz-box-shadow: 0 2px 2px -2px #0E1119;
              box-shadow: 0 2px 2px -2px #0E1119;
@@ -112,7 +119,3 @@
    transition-timing-function: line;
  }
 
- @media (max-width: 800px) {
- .container td:nth-child(4),
- .container th:nth-child(4) { display: none; }
- }
