@@ -75,7 +75,7 @@ class Ride < ApplicationRecord
 
     delay_log.minutes_late = minutes_late
     timestamp = timestamp.gsub('u ', '').gsub(' sati', '')
-    delay_log.timestamp = Time.zone.strptime(timestamp, '%d.%m.%y. %H:%M') #  10.08.24. u 22:25 sati
+    delay_log.timestamp = Time.zone.strptime(timestamp, '%d.%m.%y. %H:%M').utc
     self.minutes_late = minutes_late
 
     if last_delay_log && (last_delay_log.point_name == delay_log.point_name &&
