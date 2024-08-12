@@ -25,8 +25,8 @@
     <th>Date</th>
   </tr>
   <% @rides.order(updated_at: :desc).each do |ride| %>
-  <tr>
-    <td><%= link_to ride.minutes_late, planner_delay_logs_path(ride: ride) %></td>
+  <tr onclick="window.location='<%= planner_delay_logs_path(ride:) %>';">
+    <td><%= ride.minutes_late %></td>
     <td><%= localize(ride.ride_delay_logs.last.timestamp, :format => :short) %></td>
   </tr>
   <% end %>
