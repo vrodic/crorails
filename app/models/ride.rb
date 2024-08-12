@@ -8,12 +8,15 @@ class Ride < ApplicationRecord
 
   def sync(wait: true)
     train_id = trip.trip_short_name
+    @wait ||= rand
     get_delay(train_id, wait:)
+
     return if process_delay
 
-    puts "error fetching #{train_id}, retrying"
+    @wait += 0.1
+    puts "error fetching #{train_id}, retrying with #{@wait} second wait after"
 
-    sync(wait: wait + 0.1)
+    sync(wait:)
   end
 
   private
@@ -33,7 +36,7 @@ class Ride < ApplicationRecord
       }
     )
     @response = conn.get
-    sleep rand if wait
+    sleep @wait if wait
 
     # File.open(train_file, 'w') { |file| file.write(response.body) }
 
