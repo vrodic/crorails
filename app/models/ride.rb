@@ -82,7 +82,11 @@ class Ride < ApplicationRecord
       min.slice! 'min.'
       minutes_late = min.strip
     end
-    return false unless timestamp
+
+    unless timestamp
+      delay_log.destroy
+      return false
+    end
 
     delay_log.minutes_late = minutes_late
 

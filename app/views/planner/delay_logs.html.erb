@@ -7,7 +7,7 @@
   <% @ride.ride_delay_logs.order(:created_at).each do |delay| %>
   <tr>
     <td><%= delay.minutes_late %></td>
-    <td><%= localize(delay.timestamp, :format => :short) %></td>
+    <td><%= localize(delay.timestamp, :format => :short) if delay.timestamp %></td>
     <td><%= delay.point_name %></td>
   </tr>
   <% end %>
