@@ -10,3 +10,16 @@
 require:
   - rubocop-performance
   - rubocop-rails
+
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
