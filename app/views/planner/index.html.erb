@@ -1,10 +1,22 @@
+<script>
+  function swapSourceDestination(event) {
+    let source = document.getElementById("source");
+    let destination = document.getElementById("destination");
+    let destinationPrevious = destination.value;
+    destination.value = source.value;
+    source.value = destinationPrevious;
+    event.preventDefault();
+  }
+</script>
+
+
 <%= form_with url: planner_show_url, method: :get do |f| %>
   <%= f.select :source, @sources.map { |stop| [stop.stop_name, stop.stop_id] } %>
+    <%= f.button(:swap, {type: "button", onclick: "swapSourceDestination();"}) do
+        content_tag(:strong, "<>")
+      end %>
   <%= f.select :destination, @destinations.map { |stop| [stop.stop_name, stop.stop_id] } %>
   <%= f.date_field :date, value: Time.zone.now %>
   <br>
   <%= f.submit "Search" %>
 <% end %>
-<script>
-  
-</script>

@@ -18,7 +18,7 @@ h1 {
   color: #4dc3fa;
 }
 
-select, input {
+select, input, button {
   font-size: 1em;
   font-weight: 300;
   line-height: 1em;
