@@ -17,7 +17,8 @@ class PlannerController < ApplicationController
     destination_history&.touch
     UserStopHistory.create(stop: @destination, stop_type: 'destination') unless destination_history
 
-    time = Time.now.getlocal
+    time = Time.zone.parse(params[:date])
+    time ||= Time.now.getlocal
     time_str = time.strftime('%H:%M')
     time_str = '00:00' if params[:all_today] == '1'
     weekday = time.strftime('%A')
@@ -43,6 +44,13 @@ class PlannerController < ApplicationController
 
   def delays
     @trip = Trip.find(params[:trip_id])
-    @last_ride = @trip.sync_last_ride(wait: false)
+    @source = Stop.find(params[:source])
+    @destination = Stop.find(params[:destination])
+    @rides = Ride.joins(:trip).where(trip: { trip_short_name: @trip.trip_short_name })
+    @last_ride = @trip.sync_last_ride(wait: false) if Trip.started_trips_from.where(trip_id: @trip).exists?
+  end
+
+  def delay_logs
+    @ride = Ride.find(params[:ride])
   end
 end

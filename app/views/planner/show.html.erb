@@ -10,7 +10,7 @@ To: <strong><%= @destination.stop_name %></strong><br>
   <tr>
     <td><%= trip["departure_time"][0..4] %></td>
     <td><%= trip["destination_time"][0..4] %></td>
-    <td><%= link_to trip["trip_short_name"], planner_delays_path(trip_id: trip["trip_id"]) %></td>
+    <td><%= link_to trip["trip_short_name"], planner_delays_path(trip_id: trip["trip_id"], source: @source, destination: @destination) %></td>
   </tr>
   <% end %>
 </table>

@@ -1,0 +1,14 @@
+<table class="container">
+<tr>
+    <th>Late</th>
+    <th>Time</th>
+    <th>Place</th>
+  </tr>
+  <% @ride.ride_delay_logs.order(:created_at).each do |delay| %>
+  <tr>
+    <td><%= delay.minutes_late %></td>
+    <td><%= localize(delay.timestamp, :format => :short) %></td>
+    <td><%= delay.point_name %></td>
+  </tr>
+  <% end %>
+</table>

@@ -1,18 +1,33 @@
-Train: <%= @trip.trip_short_name %><br>
-Late: <%= @last_ride.minutes_late %>
+<table class="container container-small">
+  <tr>
+    <td>Train</td>
+    <td><%= @trip.trip_short_name %></td>
+    <td>Late</td>
+    <td><%= @last_ride&.minutes_late %></td>
+  </tr>
+  <tr>
+    <td>Place</td>
+    <td><%= @last_ride&.ride_delay_logs&.last&.point_name %></td>
+    <td>Time</td>
+    <td><%= localize(@last_ride&.ride_delay_logs&.last&.timestamp, :format => :short) if @last_ride%></td>
+  </tr>
+    <tr>
+    <td>Departure</td>
+    <td><%= @source.stop_times.where(trip: @trip).first.delayed_arrival_time(@last_ride&.minutes_late)[0..4] %></td>
+    <td>Arrival</td>
+    <td><%= @destination.stop_times.where(trip: @trip).first.delayed_arrival_time(@last_ride&.minutes_late)[0..4] %></td>
+  </tr>
+</table>
+
 <table class="container">
 <tr>
     <th>Late</th>
-    <th>Time</th>
-    <th>Status</th>
-    <th>Checkpoint</th>
+    <th>Date</th>
   </tr>
-  <% @trip.rides.order(updated_at: :desc).each do |ride| %>
+  <% @rides.order(updated_at: :desc).each do |ride| %>
   <tr>
-    <td><%= ride.minutes_late %></td>
+    <td><%= link_to ride.minutes_late, planner_delay_logs_path(ride: ride) %></td>
     <td><%= localize(ride.ride_delay_logs.last.timestamp, :format => :short) %></td>
-    <td><%= ride.status %></td>
-    <td><%= ride.ride_delay_logs.last.point_name %></td>
   </tr>
   <% end %>
 </table>
