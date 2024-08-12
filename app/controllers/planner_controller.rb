@@ -36,6 +36,10 @@ class PlannerController < ApplicationController
     @ride = Ride.find(params[:ride])
   end
 
+  def train_stops
+    @trip = Trip.started_trips_from(Time.zone.now.end_of_day).where(trip_short_name: params[:train_id]).first
+  end
+
   private
 
   def timetable(time)

@@ -4,7 +4,7 @@
 <table class="container container-small">
   <tr>
     <td>Train</td>
-    <td><%= @trip.trip_short_name %></td>
+    <td><%= link_to @trip.trip_short_name, planner_train_stops_path(train_id: @trip.trip_short_name) %></td>
     <td><%= minutes_late %> min.</td>
     <td><%= @last_ride&.status %></td>
   </tr>

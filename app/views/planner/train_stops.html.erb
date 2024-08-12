@@ -1,0 +1,8 @@
+<table class="container container-small">
+  <% @trip.stop_times.order(:stop_sequence).find_each do |time| %>
+    <tr onclick="window.location='<%= planner_delays_path(train_id: @trip.trip_short_name) %>';">
+      <td><%= time.stop.stop_name %></td>
+      <td><%= time.arrival_time[0..4] %></td>
+    </tr>
+  <% end %>
+</table>

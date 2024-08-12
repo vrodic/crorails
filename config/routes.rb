@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get 'planner/show'
   get 'planner/delays'
   get 'planner/delay_logs'
+  get 'planner/train_stops'
   get '/' => 'planner#index'
 
   get 'stats/delays'

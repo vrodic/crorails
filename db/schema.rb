@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_11_184005) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_12_175718) do
   create_table "agency", id: false, force: :cascade do |t|
     t.text "agency_id"
     t.text "agency_name"
@@ -78,7 +78,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_11_184005) do
     t.text "arrival_time"
     t.text "departure_time"
     t.text "stop_id"
-    t.text "stop_sequence"
+    t.integer "stop_sequence"
     t.text "pickup_type"
     t.text "drop_off_type"
     t.index ["stop_id"], name: "st_stop_idx"
