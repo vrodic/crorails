@@ -1,21 +1,24 @@
+<%
+  minutes_late = @last_ride&.minutes_late
+%>
 <table class="container container-small">
   <tr>
     <td>Train</td>
     <td><%= @trip.trip_short_name %></td>
-    <td>Late</td>
-    <td><%= @last_ride&.minutes_late %></td>
+    <td><%= minutes_late %> min.</td>
+    <td><%= @last_ride&.status %></td>
   </tr>
   <tr>
     <td>Place</td>
     <td><%= @last_ride&.ride_delay_logs&.last&.point_name %></td>
     <td>Time</td>
-    <td><%= localize(@last_ride&.ride_delay_logs&.last&.timestamp, :format => :short) if @last_ride%></td>
+    <td><%= localize(@last_ride&.ride_delay_logs&.last&.timestamp, :format => :short) if @last_ride %></td>
   </tr>
-    <tr>
-    <td>Departure</td>
-    <td><%= @source.stop_times.where(trip: @trip).first.delayed_arrival_time(@last_ride&.minutes_late)[0..4] %></td>
-    <td>Arrival</td>
-    <td><%= @destination.stop_times.where(trip: @trip).first.delayed_arrival_time(@last_ride&.minutes_late)[0..4] %></td>
+  <tr>
+    <td><%= @source.stop_name %></td>
+    <td><%= @source.stop_times.where(trip: @trip).first.delayed_arrival_time(minutes_late)[0..4] %></td>
+    <td><%= @destination.stop_name %></td>
+    <td><%= @destination.stop_times.where(trip: @trip).first.delayed_arrival_time(minutes_late)[0..4] %></td>
   </tr>
 </table>
 
@@ -26,7 +29,7 @@
   </tr>
   <% @rides.order(updated_at: :desc).each do |ride| %>
   <tr onclick="window.location='<%= planner_delay_logs_path(ride:) %>';">
-    <td><%= ride.minutes_late %></td>
+    <td><%= ride.minutes_late %> min.</td>
     <td><%= localize(ride.ride_delay_logs.last.timestamp, :format => :short) %></td>
   </tr>
   <% end %>

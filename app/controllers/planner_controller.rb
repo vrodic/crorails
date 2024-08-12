@@ -22,9 +22,12 @@ class PlannerController < ApplicationController
   end
 
   def delays
-    @trip = Trip.find(params[:trip_id])
-    @source = Stop.find(params[:source])
-    @destination = Stop.find(params[:destination])
+    @trip = Trip.started_trips_from.where(trip_short_name: params[:train_id]).first if params[:train_id]
+    @trip ||= Trip.find(params[:trip_id])
+    @source = @trip.stop_times.first.stop unless params[:source]
+    @destination = @trip.stop_times.last.stop unless params[:destination]
+    @source ||= Stop.find(params[:source])
+    @destination ||= Stop.find(params[:destination])
     @rides = Ride.joins(:trip).where(trip: { trip_short_name: @trip.trip_short_name })
     @last_ride = @trip.sync_last_ride(wait: false) if Trip.started_trips_from.where(trip_id: @trip).exists?
   end

@@ -4,7 +4,7 @@ class Ride < ApplicationRecord
   belongs_to :trip
   has_many :ride_delay_logs
 
-  enum :status, %i[initialized ready moving finished]
+  enum :status, %i[initialized ready deployed finished]
 
   def sync(wait: true)
     train_id = trip.trip_short_name
@@ -71,8 +71,8 @@ class Ride < ApplicationRecord
         timestamp = test_finished.strip
       end
       if test_moving
-        self.status = :moving
-        delay_log.status = :moving
+        self.status = :deployed
+        delay_log.status = :deployed
         timestamp = test_moving.strip
       end
       test_delay = return_value(text, 'Kasni')

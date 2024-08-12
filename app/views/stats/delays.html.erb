@@ -1,0 +1,13 @@
+<table class="container container-small">
+  <%= form_with url: nil, method: :get do |f| %>
+    <%= f.select :stop, @stops.map { |stop| [stop.stop_name, stop.stop_id] } %>
+    <%= f.submit "Show" %>
+  <% end %>
+  <% @delays.each do |ride| %>
+    <tr onclick="window.location='<%= planner_delays_path(train_id: ride.trip.trip_short_name) %>';">
+      <td><%= ride.trip.route.route_long_name %></td>
+      <td><%= ride.trip.trip_short_name %></td>
+      <td><%= ride.minutes_late %> min.</td>
+    </tr>
+  <% end %>
+</table>
