@@ -22,7 +22,9 @@ class PlannerController < ApplicationController
   end
 
   def delays
-    @trip = Trip.started_trips_from.where(trip_short_name: params[:train_id]).first if params[:train_id]
+    if params[:train_id]
+      @trip = Trip.started_trips_from(Time.zone.now.end_of_day).where(trip_short_name: params[:train_id]).first
+    end
     @trip ||= Trip.find(params[:trip_id])
     @source = @trip.stop_times.first.stop unless params[:source]
     @destination = @trip.stop_times.last.stop unless params[:destination]
