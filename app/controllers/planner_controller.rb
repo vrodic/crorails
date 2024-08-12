@@ -27,19 +27,24 @@ class PlannerController < ApplicationController
     sql = <<~SQL
       SELECT stop_times.arrival_time departure_time, destination_times.arrival_time destination_time, stop_times.trip_id, trips.trip_short_name
       FROM trips
-      JOIN calendar ON trips.service_id = calendar.service_id  AND '#{date}' BETWEEN start_date AND end_date AND #{weekday}=1
+      JOIN calendar ON trips.service_id = calendar.service_id  AND :date BETWEEN start_date AND end_date AND #{weekday} =1
       JOIN stop_times ON trips.trip_id=stop_times.trip_id
       JOIN stop_times destination_times ON destination_times.trip_id=stop_times.trip_id
       JOIN stops destinations ON destinations.stop_id=destination_times.stop_id
       JOIN stops ON stops.stop_id =stop_times.stop_id
-      WHERE  stop_times.departure_time > '#{time_str}' AND
-        stops.stop_id='#{@source.stop_id}' AND
-        destinations.stop_id = '#{@destination.stop_id}' AND
+      WHERE  stop_times.departure_time > :time_str AND
+        stops.stop_id= :source_stop_id AND
+        destinations.stop_id = :destination_stop_id AND
         destination_times.stop_sequence > stop_times.stop_sequence
       ORDER BY stop_times.arrival_time ASC;
     SQL
-
-    @trips = StopTime.connection.select_all(sql).to_a
+    sanitized_sql = ActiveRecord::Base.sanitize_sql_array(
+      [
+        sql, { date:, weekday:, source_stop_id: @source.stop_id,
+               destination_stop_id: @destination.stop_id, time_str: }
+      ]
+    )
+    @trips = StopTime.connection.select_all(sanitized_sql).to_a
   end
 
   def delays
