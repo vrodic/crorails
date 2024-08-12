@@ -1,9 +1,10 @@
 <%= form_with url: planner_show_url, method: :get do |f| %>
   <%= f.select :source, @sources.map { |stop| [stop.stop_name, stop.stop_id] } %>
   <%= f.select :destination, @destinations.map { |stop| [stop.stop_name, stop.stop_id] } %>
-  <%= f.check_box :all_today %>
-  <%= f.label :all_today, "All trains today" %>
-  <%= f.date_field :date %>
+  <%= f.date_field :date, value: Time.zone.now %>
   <br>
   <%= f.submit "Search" %>
 <% end %>
+<script>
+  
+</script>

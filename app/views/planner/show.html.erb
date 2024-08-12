@@ -1,6 +1,6 @@
 From: <strong><%= @source.stop_name %></strong><br>
 To: <strong><%= @destination.stop_name %></strong><br>
-<table class="container">
+<table class="container" id="table">
 <tr>
     <th>Departure</th>
     <th>Arrival</th>
@@ -14,3 +14,24 @@ To: <strong><%= @destination.stop_name %></strong><br>
   </tr>
   <% end %>
 </table>
+<script>
+let table = document.getElementById("table");
+let now = new Date();
+
+let lowestDiffTr;
+for (let row of table.rows)
+{
+  let t1 = row.cells[0].innerText;
+  let time = new Date(`<%= @date.strftime("%Y-%m-%d") %>T${t1}`);
+  if (time - now > 0 && lowestDiffTr) {
+      setTimeout(function () {
+
+        lowestDiffTr.scrollIntoView();
+      }, 0);
+
+      break;
+  }
+  lowestDiffTr = row;
+}
+
+</script>

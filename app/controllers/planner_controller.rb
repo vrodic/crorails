@@ -17,10 +17,26 @@ class PlannerController < ApplicationController
     destination_history&.touch
     UserStopHistory.create(stop: @destination, stop_type: 'destination') unless destination_history
 
-    time = Time.zone.parse(params[:date])
-    time ||= Time.now.getlocal
+    @date = Time.zone.parse(params[:date])
+    @trips = timetable(@date)
+  end
+
+  def delays
+    @trip = Trip.find(params[:trip_id])
+    @source = Stop.find(params[:source])
+    @destination = Stop.find(params[:destination])
+    @rides = Ride.joins(:trip).where(trip: { trip_short_name: @trip.trip_short_name })
+    @last_ride = @trip.sync_last_ride(wait: false) if Trip.started_trips_from.where(trip_id: @trip).exists?
+  end
+
+  def delay_logs
+    @ride = Ride.find(params[:ride])
+  end
+
+  private
+
+  def timetable(time)
     time_str = time.strftime('%H:%M')
-    time_str = '00:00' if params[:all_today] == '1'
     weekday = time.strftime('%A')
     date = time.strftime('%Y%m%d')
 
@@ -38,24 +54,17 @@ class PlannerController < ApplicationController
         destination_times.stop_sequence > stop_times.stop_sequence
       ORDER BY stop_times.arrival_time ASC;
     SQL
+
     sanitized_sql = ActiveRecord::Base.sanitize_sql_array(
       [
         sql, { date:, weekday:, source_stop_id: @source.stop_id,
                destination_stop_id: @destination.stop_id, time_str: }
       ]
     )
-    @trips = StopTime.connection.select_all(sanitized_sql).to_a
-  end
 
-  def delays
-    @trip = Trip.find(params[:trip_id])
-    @source = Stop.find(params[:source])
-    @destination = Stop.find(params[:destination])
-    @rides = Ride.joins(:trip).where(trip: { trip_short_name: @trip.trip_short_name })
-    @last_ride = @trip.sync_last_ride(wait: false) if Trip.started_trips_from.where(trip_id: @trip).exists?
-  end
-
-  def delay_logs
-    @ride = Ride.find(params[:ride])
+    table = StopTime.connection.select_all(sanitized_sql).to_a
+    table.each do |stop|
+      stop[""]
+    end
   end
 end
