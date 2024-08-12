@@ -16,7 +16,7 @@ class Ride < ApplicationRecord
     @wait += 0.1
     puts "error fetching #{train_id}, retrying with #{@wait} second wait after"
 
-    sync(wait:)
+    sync(wait: true)
   end
 
   private
