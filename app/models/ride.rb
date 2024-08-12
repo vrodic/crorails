@@ -8,7 +8,12 @@ class Ride < ApplicationRecord
 
   def sync(wait: true)
     train_id = trip.trip_short_name
-    process_delay(get_delay(train_id, wait:))
+    get_delay(train_id, wait:)
+    return if process_delay
+
+    puts "error fetching #{train_id}, retrying"
+
+    sync(wait: wait + 0.1)
   end
 
   private
@@ -27,21 +32,23 @@ class Ride < ApplicationRecord
         "User-Agent": 'okhttp/4.11.0'
       }
     )
-    response = conn.get
+    @response = conn.get
     sleep rand if wait
 
     # File.open(train_file, 'w') { |file| file.write(response.body) }
 
-    response.body
+    @response.body
   end
 
-  def process_delay(html)
+  def process_delay
+    return true if @response.body.include? "Vlak nije u evidenciji."
+
     last_delay_log = ride_delay_logs.last
     delay_log = ride_delay_logs.build
     minutes_late = 0
     timestamp = nil
 
-    document = Nokogiri::HTML(html)
+    document = Nokogiri::HTML(@response.body)
     document.css('td').each do |td|
       text = td.text.strip
       test_point = return_value(text, 'Kolodvor: ')
@@ -72,8 +79,10 @@ class Ride < ApplicationRecord
       min.slice! 'min.'
       minutes_late = min.strip
     end
+    return false unless timestamp
 
     delay_log.minutes_late = minutes_late
+
     timestamp = timestamp.gsub('u ', '').gsub(' sati', '')
     delay_log.timestamp = Time.zone.strptime(timestamp, '%d.%m.%y. %H:%M').utc
     self.minutes_late = minutes_late
