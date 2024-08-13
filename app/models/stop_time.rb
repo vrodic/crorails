@@ -8,6 +8,10 @@ class StopTime < ApplicationRecord
   def delayed_arrival_time(delay_minutes)
     delay_minutes ||= 0
 
-    (Time.zone.parse(arrival_time) + delay_minutes * 60).strftime('%H:%M')
+    begin
+      (Time.zone.parse(arrival_time) + delay_minutes * 60).strftime('%H:%M')
+    rescue ArgumentError
+      arrival_time
+    end
   end
 end
