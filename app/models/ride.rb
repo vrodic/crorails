@@ -6,6 +6,8 @@ class Ride < ApplicationRecord
 
   enum :status, %i[initialized ready deployed finished]
 
+  before_create :set_trip_short_name
+
   def sync(wait: true)
     train_id = trip.trip_short_name
     @wait ||= rand
@@ -20,6 +22,10 @@ class Ride < ApplicationRecord
   end
 
   private
+
+  def set_trip_short_name
+    self.trip_short_name = trip.trip_short_name
+  end
 
   def get_delay(train_id, wait: true)
     # train_file = "/tmp/hz-#{train_id}-#{Time.zone.now.strftime('%Y%m%d')}.html"

@@ -1,19 +1,24 @@
 From: <strong><%= @source.stop_name %></strong><br>
 To: <strong><%= @destination.stop_name %></strong><br>
+Date: <strong><%= l(@date, format: :short) %></strong><br>
 <table class="container" id="table">
 <tr>
     <th>Departure</th>
     <th>Arrival</th>
     <th>Train</th>
   </tr>
-  <% @trips.each do |trip| %>
+  <% @trips.each do |trip|
+      departure_time = trip["departure_time"][0..4]
+      departure_time += " (#{trip["minutes_late"]})" if trip["minutes_late"].positive? %>
   <tr onclick="window.location='<%= planner_delays_path(trip_id: trip["trip_id"], source: @source, destination: @destination) %>';">
-    <td><%= trip["departure_time"][0..4] %></td>
+    <td><%= departure_time %></td>
     <td><%= trip["destination_time"][0..4] %></td>
     <td><%= trip["trip_short_name"] %></td>
   </tr>
   <% end %>
 </table>
+<%= link_to "< Previous", planner_show_path(params.merge(date: Date.parse(params[:date]) - 1.day).permit(:date,:source, :destination)), id: :bottom_left %>
+<%= link_to "Next >", planner_show_path(params.merge(date: Date.parse(params[:date]) + 1.day).permit(:date,:source, :destination)), id: :bottom_right %>
 <script>
 let table = document.getElementById("table");
 let now = new Date();

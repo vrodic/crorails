@@ -17,7 +17,8 @@
   </head>
 
   <body>
-    <img src="/logo.jpg" height="40"><%= link_to "Plan", planner_index_path %>&nbsp;&nbsp;<%= link_to "Delays", stats_delays_path %><br>
+    <%= link_to "< Plan", planner_index_path, id: :top_left %>
+    <%= link_to "Delays  >>", stats_delays_path, id: :top_right %><br>
     <%= yield %>
   </body>
 </html>

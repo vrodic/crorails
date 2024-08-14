@@ -137,3 +137,25 @@ a {
   transition-property: all;
   transition-timing-function: line;
 }
+
+#top_left {
+  position: fixed;
+  top: 0;
+}
+
+#top_right {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
+#bottom_right {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+#bottom_left {
+  position: fixed;
+  bottom: 0;
+}

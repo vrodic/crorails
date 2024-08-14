@@ -17,7 +17,7 @@ class PlannerController < ApplicationController
     destination_history&.touch
     UserStopHistory.create(stop: @destination, stop_type: 'destination') unless destination_history
 
-    @date = Time.zone.parse(params[:date])
+    @date = Date.parse(params[:date])
     @trips = timetable(@date)
   end
 
@@ -50,7 +50,11 @@ class PlannerController < ApplicationController
     date = time.strftime('%Y%m%d')
 
     sql = <<~SQL
-      SELECT stop_times.arrival_time departure_time, destination_times.arrival_time destination_time, stop_times.trip_id, trips.trip_short_name
+      SELECT
+        stop_times.arrival_time departure_time,
+        destination_times.arrival_time destination_time,
+        stop_times.trip_id, trips.trip_short_name,
+        (SELECT minutes_late FROM rides WHERE rides.trip_short_name=trips.trip_short_name ORDER BY created_at DESC LIMIT 1) minutes_late
       FROM trips
       JOIN calendar ON trips.service_id = calendar.service_id  AND :date BETWEEN start_date AND end_date AND #{weekday} =1
       JOIN stop_times ON trips.trip_id=stop_times.trip_id
