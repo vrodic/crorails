@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_12_175718) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_14_081759) do
   create_table "agency", id: false, force: :cascade do |t|
     t.text "agency_id"
     t.text "agency_name"
@@ -32,6 +32,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_12_175718) do
     t.text "friday"
     t.text "saturday"
     t.text "sunday"
+    t.index ["service_id"], name: "index_calendar_on_service_id", unique: true
   end
 
   create_table "gtfs_metadata", id: false, force: :cascade do |t|
@@ -83,6 +84,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_12_175718) do
     t.text "drop_off_type"
     t.index ["stop_id"], name: "st_stop_idx"
     t.index ["trip_id", "stop_id"], name: "stop_times_idx"
+    t.index ["trip_id", "stop_sequence"], name: "index_stop_times_on_trip_id_and_stop_sequence"
     t.index ["trip_id"], name: "st_trip_idx"
   end
 
@@ -106,6 +108,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_12_175718) do
     t.text "bikes_allowed"
     t.text "wheelchair_accessible"
     t.index ["route_id", "direction_id"], name: "route_dir_idx"
+    t.index ["service_id"], name: "index_trips_on_service_id"
     t.index ["shape_id"], name: "t_shape_idx"
     t.index ["trip_id"], name: "trip_idx", unique: true
   end

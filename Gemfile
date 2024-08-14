@@ -17,6 +17,10 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 
 gem 'nokogiri'
 
+gem 'csv'
+gem "hashdiff"
+gem 'rubyzip'
+
 group :development do
   gem 'ruby-lsp', require: false
 end

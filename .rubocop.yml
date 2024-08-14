@@ -23,3 +23,6 @@ Metrics:
 
 Style/Documentation:
   Enabled: false
+
+Rails/Output:
+  Enabled: false

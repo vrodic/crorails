@@ -1,5 +1,5 @@
 namespace :log_delays do
-  desc 'Every 5 minutes'
+  desc 'Fetch new delays info'
   task get: :environment do
     Ride.deployed.find_each do |ride|
       ride.sync
