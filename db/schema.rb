@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_14_081759) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_14_104932) do
   create_table "agency", id: false, force: :cascade do |t|
     t.text "agency_id"
     t.text "agency_name"
@@ -40,10 +40,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_14_081759) do
     t.text "imported_at"
     t.text "cleaned"
   end
-
-# Could not dump table "log_rides_stops" because of following StandardError
-#   Unknown type '' for column 'point_time'
-
 
   create_table "ride_delay_logs", id: false, force: :cascade do |t|
     t.integer "ride_id"
