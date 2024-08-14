@@ -18,20 +18,19 @@ To: <strong><%= @destination.stop_name %></strong><br>
 let table = document.getElementById("table");
 let now = new Date();
 
-let lowestDiffTr;
 for (let row of table.rows)
 {
   let t1 = row.cells[0].innerText;
   let time = new Date(`<%= @date.strftime("%Y-%m-%d") %>T${t1}`);
-  if (time - now > 0 && lowestDiffTr) {
+  if (time - now > 0) {
       setTimeout(function () {
 
-        lowestDiffTr.scrollIntoView();
+        row.scrollIntoView();
+        row.children[0].classList.add("highlight")
       }, 0);
 
       break;
   }
-  lowestDiffTr = row;
 }
 
 </script>

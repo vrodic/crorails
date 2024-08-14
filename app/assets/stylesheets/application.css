@@ -116,17 +116,17 @@ a {
   color: #fb667a;
 }
 
-.container tr:hover {
+.container tr:hover, .highlight {
   background-color: #464a52;
   -webkit-box-shadow: 0 6px 6px -6px #0e1119;
   -moz-box-shadow: 0 6px 6px -6px #0e1119;
   box-shadow: 0 6px 6px -6px #0e1119;
 }
 
-.container td:hover {
+.container td:hover, .highlight {
   background-color: #fff842;
-  color: #403e10;
-  font-weight: bold;
+  color: #403e10 !important;
+  font-weight: bold !important;
 
   box-shadow: #7f7c21 -1px 1px, #7f7c21 -2px 2px, #7f7c21 -3px 3px,
     #7f7c21 -4px 4px, #7f7c21 -5px 5px, #7f7c21 -6px 6px;
