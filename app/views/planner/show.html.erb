@@ -3,15 +3,15 @@ To: <strong><%= @destination.stop_name %></strong><br>
 Date: <strong><%= l(@date, format: :short) %></strong><br>
 <table class="container" id="table">
 <tr>
-    <th>Departure</th>
-    <th>Arrival</th>
+    <th>Depa.</th>
+    <th>La.</th>
+    <th>Arri.</th>
     <th>Train</th>
   </tr>
-  <% @trips.each do |trip|
-      departure_time = trip["departure_time"][0..4]
-      departure_time += " (#{trip["minutes_late"]})" if trip["minutes_late"].positive? %>
+  <% @trips.each do |trip| %>
   <tr onclick="window.location='<%= planner_delays_path(trip_id: trip["trip_id"], source: @source, destination: @destination) %>';">
-    <td><%= departure_time %></td>
+    <td><%= trip["departure_time"][0..4] %></td>
+    <td><%= trip["minutes_late"] if trip["minutes_late"].positive? %></td>
     <td><%= trip["destination_time"][0..4] %></td>
     <td><%= trip["trip_short_name"] %></td>
   </tr>
