@@ -1,22 +1,21 @@
 class StatsController < ApplicationController
   def delays
-    @stops = UserStopHistory.order(updated_at: :desc).map(&:stop) + Stop.order(:stop_name)
+    @stop = Stop.find(params[:stop]) if params[:stop].present?
+    @stops = ([@stop] + UserStopHistory.order(updated_at: :desc).map(&:stop) + Stop.order(:stop_name)).uniq.compact
 
-    @stop = Stop.find(params[:stop]) if params[:stop]
-    if @stop
-      @delays = deployed_late_rides.where(trip_id: @stop.stop_times.pluck(:trip_id))
-      @date ||= Time.zone.now.strftime("%Y-%m-%d")
-    end
+    @date = params[:date] if params[:date].present?
+    @date ||= Time.zone.now.strftime("%Y-%m-%d")
 
-    @delays = @delays.where("created_at > ?", @date) if @date
+    @delays = late_rides
+    @delays = @delays.where(trip_id: @stop.stop_times.pluck(:trip_id)) if @stop.present?
 
-    @delays ||= deployed_late_rides.where(status: :deployed)
-    @delays = @delays.order(minutes_late: :desc)
+    @delays = @delays.where("created_at >= ? AND created_at <= ?", @date, Time.zone.parse(@date).end_of_day) if @date
+    @delays = @delays.order(updated_at: :desc)
   end
 
   private
 
-  def deployed_late_rides
+  def late_rides
     Ride.includes(trip: [:route]).where("minutes_late > 0")
   end
 end

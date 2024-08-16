@@ -1,12 +1,23 @@
+
 <%= form_with url: nil, method: :get do |f| %>
-  <%= f.select :stop, @stops.map { |stop| [stop.stop_name, stop.stop_id] } %>
+  <%= f.date_field :date, value: @date || Time.zone.now %>
+  <%= f.select :stop, @stops.map { |stop| [stop.stop_name, stop.stop_id] }, include_blank: true, selected: @stop&.stop_id %>
   <%= f.submit "Show" %>
 <% end %>
 <table class="container container-small">
+  <tr>
+    <th>Route</th>
+    <th>Train</th>
+    <th>Status</th>
+    <th>Timestamp</th>
+    <th>Late</th>
+  </tr>
   <% @delays.each do |ride| %>
     <tr onclick="window.location='<%= planner_delays_path(train_id: ride.trip.trip_short_name) %>';">
       <td><%= ride.trip.route.route_long_name %></td>
       <td><%= ride.trip.trip_short_name %></td>
+      <td><%= ride.ride_delay_logs.last.status %></td>
+      <td><%= l(ride.ride_delay_logs.last.timestamp, :format => :short) %></td>
       <td><%= ride.minutes_late %> min.</td>
     </tr>
   <% end %>
