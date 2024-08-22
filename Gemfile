@@ -21,10 +21,6 @@ gem 'csv'
 gem "hashdiff"
 gem 'rubyzip'
 
-group :development do
-  gem 'ruby-lsp', require: false
-end
-
 group :development, :test do
   gem 'erb_lint'
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
