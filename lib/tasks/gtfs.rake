@@ -13,7 +13,7 @@ namespace :gtfs do
 
         case entry.name
         when "calendar.txt"
-          Calendar.sync_csv(content)
+          Calendar.sync_csv(content, truncate: true)
         when "routes.txt"
           Route.sync_csv(content)
         when "stops.txt"

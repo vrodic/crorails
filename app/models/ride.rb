@@ -21,6 +21,14 @@ class Ride < ApplicationRecord
     sync(wait: true)
   end
 
+  def equal_delay(old, new_log)
+    return true if old && (old.point_name == new_log.point_name &&
+    old.minutes_late == new_log.minutes_late &&
+    old.status == new_log.status && new_log.timestamp == old.timestamp)
+
+    false
+  end
+
   private
 
   def set_trip_short_name
@@ -100,11 +108,7 @@ class Ride < ApplicationRecord
     delay_log.timestamp = Time.zone.strptime(timestamp, '%d.%m.%y. %H:%M').utc
     self.minutes_late = minutes_late
 
-    if last_delay_log && (last_delay_log.point_name == delay_log.point_name &&
-         last_delay_log.minutes_late == delay_log.minutes_late &&
-         last_delay_log.status == delay_log.status && delay_log.timestamp == last_delay_log.timestamp)
-      delay_log.destroy
-    end
+    delay_log.destroy if equal_delay(last_delay_log, delay_log)
     save
   end
 

@@ -1,7 +1,8 @@
 class ApplicationRecord < ActiveRecord::Base
   primary_abstract_class
 
-  def self.sync_csv(content)
+  def self.sync_csv(content, truncate: false)
+    ActiveRecord::Base.connection.execute("Delete from #{table_name}") if truncate
     primary_key_str = primary_key.to_s
     # count = 0
     parsed = CSV.parse(content, headers: true, encoding: "UTF-8")
@@ -29,7 +30,8 @@ class ApplicationRecord < ActiveRecord::Base
       hash_col = col.to_h
       unless old_record
         create(hash_col)
-        puts "Created record##{table_name} #{key}}"
+        print "."
+        # puts "Created record##{table_name} #{key}}"
         next
       end
       next if old_record.attributes == hash_col
