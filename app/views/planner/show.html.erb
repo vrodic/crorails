@@ -11,7 +11,7 @@ Date: <strong><%= l(@date, format: :short) %></strong><br>
   <% @trips.each do |trip| %>
   <tr onclick="window.location='<%= planner_delays_path(trip_id: trip["trip_id"], source: @source, destination: @destination, date: params[:date]) %>';">
     <td><%= trip["departure_time"][0..4] %></td>
-    <td><%= trip["minutes_late"] if trip["minutes_late"].positive? %></td>
+    <td><%= trip["minutes_late"] if trip["minutes_late"]&.positive? %></td>
     <td><%= trip["destination_time"][0..4] %></td>
     <td><%= trip["trip_short_name"] %></td>
   </tr>
