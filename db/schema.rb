@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_14_203041) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_22_152305) do
   create_table "agency", id: false, force: :cascade do |t|
     t.text "agency_id"
     t.text "agency_name"
@@ -90,6 +90,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_14_203041) do
     t.text "stop_lat"
     t.text "stop_lon"
     t.index ["stop_id"], name: "stop_idx", unique: true
+  end
+
+  create_table "train_ignores", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "trips", id: false, force: :cascade do |t|

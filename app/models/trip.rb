@@ -19,7 +19,7 @@ class Trip < ApplicationRecord
       .where("? BETWEEN start_date AND end_date AND #{weekday}=1", date)
   }
 
-  def sync_last_ride(wait: true)
+  def sync_last_ride(wait: true, unstarted_ignores: true)
     last_ride = rides.last
     if last_ride && !last_ride.finished?
       last_ride.sync(wait:)
@@ -29,11 +29,17 @@ class Trip < ApplicationRecord
     if last_ride && last_ride.ride_delay_logs.order(:timestamp).last.timestamp.getlocal.strftime('%Y%m%d') == Time.now.getlocal.strftime('%Y%m%d')
       return last_ride if last_ride.finished?
     else
+      if unstarted_ignores && TrainIgnore.find_by(id: trip_short_name.to_i)
+        puts "Ignored #{trip_short_name}"
+        return last_ride
+      end
+
       new_ride = rides.build
       new_ride.sync(wait:)
       if last_ride && new_ride.equal_delay(last_ride.ride_delay_logs.last, new_ride.ride_delay_logs.last)
         new_ride.destroy
-        puts "New ride not started #{last_ride.trip.trip_short_name}, possible schedule problems"
+        TrainIgnore.create(id: trip_short_name) if unstarted_ignores
+        puts "New ride not started #{trip_short_name}, possible schedule problems"
         return last_ride
       end
       return new_ride

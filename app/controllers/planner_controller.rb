@@ -31,7 +31,9 @@ class PlannerController < ApplicationController
     @source ||= Stop.find(params[:source])
     @destination ||= Stop.find(params[:destination])
     @rides = Ride.joins(:trip).where(trip: { trip_short_name: @trip.trip_short_name })
-    @last_ride = @trip.sync_last_ride(wait: false) if Trip.started_trips_from.where(trip_id: @trip).exists?
+    return unless Trip.started_trips_from.where(trip_id: @trip).exists?
+
+    @last_ride = @trip.sync_last_ride(wait: false, unstarted_ignores: false)
   end
 
   def delay_logs

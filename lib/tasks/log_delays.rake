@@ -30,4 +30,9 @@ namespace :log_delays do
       puts "#{new_ride} #{trip.trip_short_name}: #{new_last_ride.status}, late #{new_last_ride.minutes_late} min."
     end
   end
+
+  desc 'Reset ignores'
+  task reset_ignores: :environment do
+    TrainIgnore.destroy_all
+  end
 end
