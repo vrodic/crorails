@@ -40,7 +40,7 @@ namespace :log_delays do
   task cleanup_duplicates: :environment do
     sql = <<~SQL
        DELETE FROM rides WHERE id NOT in (
-         SELECT min(ride_id)
+         SELECT max(ride_id)
          FROM ride_delay_logs
          JOIN rides ON rides.id =ride_id
          GROUP BY "timestamp", trip_short_name
@@ -50,7 +50,7 @@ namespace :log_delays do
 
     sql = <<~SQL
         DELETE FROM ride_delay_logs WHERE id NOT IN (
-        SELECT min(id) FROM ride_delay_logs rdl
+        SELECT max(id) FROM ride_delay_logs rdl
         GROUP BY timestamp, ride_id, point_name
       );
     SQL
