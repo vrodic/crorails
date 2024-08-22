@@ -21,6 +21,7 @@ class Trip < ApplicationRecord
 
   def sync_last_ride(wait: true, unstarted_ignores: true)
     last_ride = rides.last
+    last_ride ||= Ride.where(trip_short_name:).last # changed GTFS
     if last_ride && !last_ride.finished?
       last_ride.sync(wait:)
       return last_ride
