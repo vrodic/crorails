@@ -6,9 +6,12 @@ class ApplicationRecord < ActiveRecord::Base
     # count = 0
     parsed = CSV.parse(content, headers: true, encoding: "UTF-8")
     puts "Syncing #{table_name}, #{parsed.length} lines"
+    count = 0
     parsed.each do |col|
-      # puts "Processing line #{count}/#{parsed.length}"
-      # count += 1
+      count += 1
+      puts "Processing line #{count}/#{parsed.length}" if (count % 1000).zero?
+
+      yield(col) if block_given?
 
       key = if primary_key.is_a?(Array)
               primary_key.map { |key_name| col[key_name] }
@@ -16,14 +19,17 @@ class ApplicationRecord < ActiveRecord::Base
               col[primary_key_str]
             end
 
-      old_record = find(key)
-
-      yield(col) if block_given?
+      old_record = nil
+      begin
+        old_record = find(key)
+      rescue ActiveRecord::RecordNotFound
+        # puts "Not found"
+      end
 
       hash_col = col.to_h
       unless old_record
-        new_record = create(hash_col)
-        puts "Created record #{new_record[primary_key_str]}"
+        create(hash_col)
+        puts "Created record##{table_name} #{key}}"
         next
       end
       next if old_record.attributes == hash_col
