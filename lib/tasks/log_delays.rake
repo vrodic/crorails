@@ -35,4 +35,33 @@ namespace :log_delays do
   task reset_ignores: :environment do
     TrainIgnore.destroy_all
   end
+
+  desc "Cleanup duplicates"
+  task cleanup_duplicates: :environment do
+    sql = <<~SQL
+       DELETE FROM rides WHERE id NOT in (
+         SELECT min(ride_id)
+         FROM ride_delay_logs
+         JOIN rides ON rides.id =ride_id
+         GROUP BY "timestamp", trip_short_name
+      );
+    SQL
+    RideDelayLog.connection.execute(sql)
+
+    sql = <<~SQL
+        DELETE FROM ride_delay_logs WHERE id NOT IN (
+        SELECT min(id) FROM ride_delay_logs rdl
+        GROUP BY timestamp, ride_id, point_name
+      );
+    SQL
+    RideDelayLog.connection.execute(sql)
+    sql = <<~SQL
+        DELETE FROM ride_delay_logs WHERE id IN (
+        SELECT ride_delay_logs.id FROM ride_delay_logs
+        LEFT JOIN rides ON rides.id=ride_id
+        WHERE rides.id IS NULL
+      );
+    SQL
+    RideDelayLog.connection.execute(sql)
+  end
 end

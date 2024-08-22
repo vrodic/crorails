@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_22_152305) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_22_183901) do
   create_table "agency", id: false, force: :cascade do |t|
     t.text "agency_id"
     t.text "agency_name"
@@ -41,7 +41,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_22_152305) do
     t.text "cleaned"
   end
 
-  create_table "ride_delay_logs", id: false, force: :cascade do |t|
+  create_table "ride_delay_logs", force: :cascade do |t|
     t.integer "ride_id"
     t.text "point_name"
     t.datetime "created_at"
