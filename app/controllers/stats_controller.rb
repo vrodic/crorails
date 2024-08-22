@@ -10,6 +10,7 @@ class StatsController < ApplicationController
     @delays = @delays.where(trip_id: @stop.stop_times.pluck(:trip_id)) if @stop.present?
 
     @delays = @delays.where("created_at >= ? AND created_at <= ?", @date, Time.zone.parse(@date).end_of_day) if @date
+    @delays = @delays.where(status: params[:status].to_sym) if params[:status]
     @delays = @delays.order(updated_at: :desc)
   end
 
