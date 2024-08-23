@@ -8,7 +8,8 @@ namespace :log_delays do
     end
   end
 
-  def put_sleep(secs = rand(5..ENV.fetch("HZPP_DELAY", 10)))
+  def put_sleep
+    secs = rand(5..@max_secs)
     puts "Sleeping #{secs}"
     $stdout.flush
     sleep secs
@@ -16,6 +17,7 @@ namespace :log_delays do
 
   def sync
     puts "SYNC_STARTED DEPLOYED_COUNT #{Ride.deployed.count} STARTED_COUNT #{Trip.started_trips_from.count}"
+    @max_secs = [5, 600 / Ride.deployed.count].max
     Ride.deployed.find_each do |ride|
       ride.sync
       ride.touch
@@ -26,7 +28,7 @@ namespace :log_delays do
     end
 
     puts "Checking new rides"
-
+    @max_secs = 10
     Trip.started_trips_from.find_each do |trip|
       last_ride = trip.rides.last
 
@@ -44,7 +46,7 @@ namespace :log_delays do
       next if new_last_ride.finished?
 
       puts "#{new_ride} #{trip.trip_short_name}: #{new_last_ride.status}, late #{new_last_ride.minutes_late} min."
-      put_sleep(rand(10))
+      put_sleep
     end
   end
 
