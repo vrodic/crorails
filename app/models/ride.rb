@@ -22,7 +22,7 @@ class Ride < ApplicationRecord
   end
 
   def equal_delay(old, new_log)
-    return true if old && (old.point_name == new_log.point_name &&
+    return true if old && new_log && (old.point_name == new_log.point_name &&
     old.minutes_late == new_log.minutes_late &&
     old.status == new_log.status && new_log.timestamp == old.timestamp)
 
