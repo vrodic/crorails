@@ -9,7 +9,7 @@ namespace :log_delays do
   end
 
   def put_sleep
-    secs = rand(5..@max_secs)
+    secs = rand(@max_secs - 2..@max_secs)
     puts "Sleeping #{secs}"
     $stdout.flush
     sleep secs
@@ -17,7 +17,7 @@ namespace :log_delays do
 
   def sync
     puts "SYNC_STARTED DEPLOYED_COUNT #{Ride.deployed.count} STARTED_COUNT #{Trip.started_trips_from.count}"
-    @max_secs = [5, 600 / Ride.deployed.count].max
+    @max_secs = [5, 600 / [Ride.deployed.count, 1].max].max
     Ride.deployed.find_each do |ride|
       ride.sync
       ride.touch
