@@ -1,12 +1,27 @@
 namespace :log_delays do
   desc 'Fetch new delays info'
   task get: :environment do
+    loop do
+      start_time = Time.current
+      sync
+      puts "LOOP_FINISHED #{Time.zone.now}, TOOK #{Time.current - start_time} SEC"
+    end
+  end
+
+  def put_sleep(secs = rand(5..ENV.fetch("HZPP_DELAY", 10)))
+    puts "Sleeping #{secs}"
+    sleep secs
+  end
+
+  def sync
+    puts "SYNC_STARTED DEPLOYED_COUNT #{Ride.deployed.count} STARTED_COUNT #{Trip.started_trips_from.count}"
     Ride.deployed.find_each do |ride|
       ride.sync
       ride.touch
 
       puts "#{ride.trip.trip_short_name}: #{ride.status}, late #{ride.minutes_late} min.,
            checkpoint #{ride.ride_delay_logs.last.timestamp}"
+      put_sleep
     end
 
     puts "Checking new rides"
@@ -28,6 +43,7 @@ namespace :log_delays do
       next if new_last_ride.finished?
 
       puts "#{new_ride} #{trip.trip_short_name}: #{new_last_ride.status}, late #{new_last_ride.minutes_late} min."
+      put_sleep(rand(10))
     end
   end
 

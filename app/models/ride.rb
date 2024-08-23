@@ -8,17 +8,17 @@ class Ride < ApplicationRecord
 
   before_create :set_trip_short_name
 
-  def sync(wait: true)
+  def sync
     train_id = trip.trip_short_name
-    @wait ||= rand
-    get_delay(train_id, wait:)
+    @wait ||= 0
+    get_delay(train_id)
 
     return if process_delay
 
     @wait += 0.1
     puts "error fetching #{train_id}, retrying with #{@wait} second wait after"
 
-    sync(wait: true)
+    sync
   end
 
   def equal_delay(old, new_log)
@@ -35,7 +35,7 @@ class Ride < ApplicationRecord
     self.trip_short_name = trip.trip_short_name
   end
 
-  def get_delay(train_id, wait: true)
+  def get_delay(train_id)
     # train_file = "/tmp/hz-#{train_id}-#{Time.zone.now.strftime('%Y%m%d')}.html"
 
     # return File.read(train_file) if File.exist?(train_file)
@@ -50,7 +50,7 @@ class Ride < ApplicationRecord
       }
     )
     @response = conn.get
-    sleep @wait if wait
+    sleep @wait if @wait.positive?
 
     # File.open(train_file, 'w') { |file| file.write(response.body) }
 
