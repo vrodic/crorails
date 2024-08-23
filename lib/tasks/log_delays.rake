@@ -32,7 +32,7 @@ namespace :log_delays do
     Trip.started_trips_from.find_each do |trip|
       last_ride = trip.rides.last
 
-      if last_ride && last_ride.updated_at > 5.minutes.ago && last_ride.deployed?
+      if last_ride && last_ride.updated_at > 15.minutes.ago && last_ride.deployed?
         # puts "Skip deployed last ride #{trip.trip_short_name} #{last_ride.updated_at}"
         next
       end
