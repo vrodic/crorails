@@ -37,16 +37,16 @@ class Trip < ApplicationRecord
     if last_ride_is_todays
       return last_ride if last_ride.finished?
     else
-      if unstarted_ignores && TrainIgnore.find_by(id: trip_short_name.to_i)
-        puts "Ignored #{trip_short_name}"
-        return last_ride
-      end
+      # if unstarted_ignores && TrainIgnore.find_by(id: trip_short_name.to_i)
+      #   puts "Ignored #{trip_short_name}"
+      #  return last_ride
+      # end
 
       new_ride = rides.build
       new_ride.sync
       if last_ride && new_ride.equal_delay(last_ride.ride_delay_logs.last, new_ride.ride_delay_logs.last)
         new_ride.destroy
-        TrainIgnore.create(id: trip_short_name) if unstarted_ignores
+        # TrainIgnore.create(id: trip_short_name) if unstarted_ignores
         puts "New ride not started #{trip_short_name}, possible schedule problems"
         return last_ride
       end

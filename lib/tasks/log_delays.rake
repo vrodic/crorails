@@ -9,6 +9,7 @@ namespace :log_delays do
   end
 
   def put_sleep(secs = rand(5..ENV.fetch("HZPP_DELAY", 10)))
+    $stdout.sync
     puts "Sleeping #{secs}"
     sleep secs
   end
