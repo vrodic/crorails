@@ -3,7 +3,11 @@ namespace :log_delays do
   task get: :environment do
     loop do
       start_time = Time.current
-      sync
+      begin
+        sync
+      rescue StandardError => e
+        puts "Exception #{e}"
+      end
       puts "LOOP_FINISHED #{Time.zone.now}, TOOK #{Time.current - start_time} SEC"
     end
   end
