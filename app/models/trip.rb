@@ -4,22 +4,23 @@ class Trip < ApplicationRecord
   self.primary_key = :trip_id
   belongs_to :route, primary_key: :route_id
 
-  has_many :stop_times
+  has_many :stop_times, dependent: :destroy
   has_many :stops, through: :stop_times
-  has_many :rides
-  belongs_to :calendar, foreign_key: :service_id
+  has_many :rides, dependent: :destroy
+  belongs_to :calendar, foreign_key: :service_id # rubocop:disable Rails/InverseOf
 
   scope :started_trips_from, lambda { |time = Time.now.getlocal|
     time_str = time.strftime('%H:%M')
-    weekday = time.strftime('%A')
+    weekday = time.strftime('%A').downcase
     date = time.strftime('%Y%m%d')
     joins(:calendar, :route, :stop_times)
       .where(stop_times: { stop_sequence: 1 })
       .where('departure_time < ?', time_str)
-      .where("? BETWEEN start_date AND end_date AND #{weekday}=1", date)
+      .where("calendar.#{weekday}": 1)
+      .where("? BETWEEN start_date AND end_date", date)
   }
 
-  def sync_last_ride(unstarted_ignores: true)
+  def sync_last_ride(unstarted_ignores: true) # rubocop:disable Lint/UnusedMethodArgument
     last_ride = rides.last
     last_ride ||= Ride.where(trip_short_name:).last # changed GTFS
     if last_ride && !last_ride.finished?
@@ -27,8 +28,6 @@ class Trip < ApplicationRecord
       return last_ride
     end
 
-    # TODO: this doesn't work for late night trains such as 1840
-    # last delay timestamp should be newer than the start time of the train for today
     if last_ride
       last_checkin = last_ride.ride_delay_logs.order(:timestamp).last.timestamp
       today_start = Time.zone.parse("#{Time.now.getlocal.strftime('%Y-%m-%d')} #{stop_times.first.departure_time}")

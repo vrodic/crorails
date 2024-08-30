@@ -3,7 +3,9 @@
 class PlannerController < ApplicationController
   def index
     @sources = UserStopHistory.where(stop_type: 'source').order(updated_at: :desc).map(&:stop) + Stop.order(:stop_name)
-    @destinations = UserStopHistory.where(stop_type: 'destination').order(updated_at: :desc).map(&:stop) + Stop.order(:stop_name)
+    @destinations = UserStopHistory
+                    .where(stop_type: 'destination')
+                    .order(updated_at: :desc).map(&:stop) + Stop.order(:stop_name)
   end
 
   def show

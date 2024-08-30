@@ -26,3 +26,6 @@ Style/Documentation:
 
 Rails/Output:
   Enabled: false
+
+Rails/SkipsModelValidations:
+  Enabled: false

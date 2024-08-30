@@ -2,7 +2,7 @@
 
 class Ride < ApplicationRecord
   belongs_to :trip
-  has_many :ride_delay_logs
+  has_many :ride_delay_logs, dependent: :destroy
 
   enum :status, %i[initialized ready deployed finished]
 

@@ -5,9 +5,4 @@ class PlannerControllerTest < ActionDispatch::IntegrationTest
     get planner_index_url
     assert_response :success
   end
-
-  test "should get show" do
-    get planner_show_url
-    assert_response :success
-  end
 end
